@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import AddPersonForm from '../AddPersonForm/AddPersonForm';
-import { addNewPerson } from '../../ducks/people';
+import { addPerson } from '../../ducks/people';
 import { connect } from 'react-redux';
 
 class PersonPage extends Component {
@@ -8,10 +8,10 @@ class PersonPage extends Component {
         return (
             <div>
                 <h2>Add new person</h2>
-                <AddPersonForm onSubmit={this.props.addNewPerson} />
+                <AddPersonForm onSubmit={this.props.addPerson} />
             </div>
         );
     }
 }
  
-export default connect(null, {addNewPerson})(PersonPage);
+export default connect(null, {addPerson})(PersonPage);
