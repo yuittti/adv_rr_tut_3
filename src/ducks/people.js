@@ -37,9 +37,9 @@ export function addPerson(person) {
     }
 }
 
-const addPersonSaga = function * (action) {
+export const addPersonSaga = function * (action) {
     const id = yield call(generateId);
-    console.log(id);
+    
     yield put({
         type: ADD_PERSON,
         payload: {...action.payload, id}
