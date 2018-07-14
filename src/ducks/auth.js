@@ -1,7 +1,7 @@
 import firebase from 'firebase'
 import { appName } from '../config';
 import { Record } from 'immutable';
-import { all, call, put, take } from 'redux-saga/effects';
+import { all, call, put, cps, take } from 'redux-saga/effects';
 
 const ReducerRecord = Record({
     user: null,
@@ -78,6 +78,19 @@ export const signUpSaga = function * () {
     }
 }
 
+export const watchStatusChange = function * () {
+    const auth = firebase.auth();
+
+    try {
+        yield cps([auth, auth.onAuthStateChanged])
+    } catch (user) {
+        yield put({
+            type: SIGN_IN_SUCCESS,
+            payload: {user}
+        })
+    }
+}
+
 // AC with redux-thunk
 // ---
 // export function signUp(email, password) {
@@ -100,17 +113,20 @@ export const signUpSaga = function * () {
 //     }
 // }
 
-firebase.auth().onAuthStateChanged(user => {
-    // tmp solution
-    const store = require('../redux').default;
-    store.dispatch({
-        type: SIGN_IN_SUCCESS,
-        payload: {user}
-    })
-});
+// sign up for changes without saga
+//
+// firebase.auth().onAuthStateChanged(user => {
+//     // tmp solution
+//     const store = require('../redux').default;
+//     store.dispatch({
+//         type: SIGN_IN_SUCCESS,
+//         payload: {user}
+//     })
+// });
 
 export const saga = function * () {
     yield all([
-        signUpSaga()
+        signUpSaga(),
+        watchStatusChange()
     ])
 }

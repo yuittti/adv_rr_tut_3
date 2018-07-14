@@ -10,7 +10,7 @@ class Root extends Component {
         return (
             <div>
                 <ProtectedRoute path = '/admin' component = {AdminPage} />
-                <Route path = '/people' component = {PersonPage} />
+                <ProtectedRoute path = '/people' component = {PersonPage} />
                 <Route path = '/auth' component = {AuthPage} />
             </div>
         );
