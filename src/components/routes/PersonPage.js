@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import AddPersonForm from '../AddPersonForm/AddPersonForm';
-import PeopleList from '../PeopleList/PeopleList';
+import PeopleTable from '../PeopleTable/PeopleTable';
 import { addPerson, moduleName } from '../../ducks/people';
 import { connect } from 'react-redux';
 import Loader from '../Loader/Loader';
@@ -15,7 +15,7 @@ class PersonPage extends Component {
                     ? <Loader />
                     : <AddPersonForm onSubmit={addPerson} />
                 }
-                <PeopleList />
+                <PeopleTable />
             </div>
         );
     }

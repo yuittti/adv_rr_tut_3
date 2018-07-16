@@ -4,24 +4,24 @@ import { moduleName, fetchAllPeople, peopleListSelector } from '../../ducks/peop
 import { Table, Column } from 'react-virtualized';
 import 'react-virtualized/styles.css';
 
-class PeopleList extends Component {
+export class PeopleTable extends Component {
 
     componentDidMount() {
-        this.props.fetchAllPeople();
+        this.props.fetchAllPeople && this.props.fetchAllPeople();
     }
     
     render() { 
         const {people} = this.props;
-        console.log(people)
         return (
             <Table
                 rowCount={people.length}
                 rowGetter={this.rowGetter}
                 rowHeight={40}
                 headerHeight={50}
-                overscanRowCount={5}
+                overscanRowCount={2}
                 width={750}
                 height={300}
+                rowClassName="test--people-list__row"
             >
                 <Column
                     label="firstName"
@@ -45,4 +45,4 @@ class PeopleList extends Component {
  
 export default connect(state => ({
     people: peopleListSelector(state)
-}), {fetchAllPeople})(PeopleList);
+}), {fetchAllPeople})(PeopleTable);
