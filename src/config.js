@@ -1,4 +1,8 @@
 import firebase from 'firebase';
+import { configure } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+
+configure({ adapter: new Adapter() });
 
 export const appName = 'adv-rr-tut-3';
 export const firebaseConfig = {
