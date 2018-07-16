@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import EventList from '../../components/EventList/EventList';
+import VirtualizedEventList from '../../components/VirtualizedEventList/VirtualizedEventList';
 
 class EventsPage extends Component {
 
@@ -7,7 +7,7 @@ class EventsPage extends Component {
         return (
             <div>
                 <h1>Events Page</h1>
-                <EventList />
+                <VirtualizedEventList />
             </div>
         );
     }
