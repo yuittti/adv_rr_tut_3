@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PeopleList from '../PeopleList/PeopleList';
 
 class AdminPage extends Component {
     
@@ -6,6 +7,7 @@ class AdminPage extends Component {
         return (
             <div>
                 <h1>Admin Page</h1>
+                <PeopleList />
             </div>
         );
     }
