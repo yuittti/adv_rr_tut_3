@@ -8,7 +8,6 @@ import ProtectedRoute from '../common/ProtectedRoute';
 import { connect } from 'react-redux';
 import { moduleName, signOut } from '../../ducks/auth';
 import CustomDragLayer from '../CustomDragLayer/CustomDragLayer';
-import Trash from '../Trash/Trash';
 
 class Root extends Component {
     render() { 
@@ -20,12 +19,16 @@ class Root extends Component {
         return (
             <div>
                 {btn}
+                <ul>
+                    <li><Link to='/admin'>admin</Link></li>
+                    <li><Link to='/people'>people</Link></li>
+                    <li><Link to='/events'>events</Link></li>
+                </ul>
+                <CustomDragLayer />
                 <ProtectedRoute path = '/admin' component = {AdminPage} />
                 <ProtectedRoute path = '/people' component = {PersonPage} />
                 <ProtectedRoute path = '/events' component = {EventsPage} />
                 <Route path = '/auth' component = {AuthPage} />
-                <Trash />
-                <CustomDragLayer />
             </div>
         );
     }

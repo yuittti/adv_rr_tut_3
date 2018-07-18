@@ -1,6 +1,7 @@
 import { appName } from '../config';
 import { Record, List } from 'immutable';
-import { put, call, takeEvery, select} from 'redux-saga/effects';
+import { all, put, call, takeEvery, select, fork, spawn, cancel, cancelled } from 'redux-saga/effects';
+import { delay } from 'redux-saga';
 import { reset } from 'redux-form';
 import { generateId , fbDataToEntities} from './utils';
 import firebase from 'firebase';
@@ -142,6 +143,27 @@ export const addEventSaga = function * (action) {
     }
 }
 
+export const backgroundSyncSaga = function * () {
+    try {
+        while(true) {
+            yield call(fetchAllSaga);
+            yield delay(2000);
+            
+            // throw new Error;
+        }
+    } finally {
+        if (yield cancelled()) {
+            console.log('%%%%%%%%%', 'cancelled saga');
+        }
+    }
+}
+
+export const cancellableSync = function * () {
+    const task = yield fork(backgroundSyncSaga);
+    yield delay(6000);
+    yield cancel(task);
+}
+
 // export function addNewPerson(person) {
 //     return (dispatch) => {
 //         dispatch({
@@ -157,7 +179,10 @@ export const addEventSaga = function * (action) {
 // }
 
 export const saga = function * () {
-    yield takeEvery(ADD_PERSON_REQUEST, addPersonSaga);
-    yield takeEvery(FETCH_ALL_REQUEST, fetchAllSaga);
-    yield takeEvery(ADD_EVENT_REQUEST, addEventSaga);
-}
+    yield spawn(cancellableSync);
+    yield all([
+        yield takeEvery(ADD_PERSON_REQUEST, addPersonSaga),
+        yield takeEvery(FETCH_ALL_REQUEST, fetchAllSaga),
+        yield takeEvery(ADD_EVENT_REQUEST, addEventSaga)
+    ]);
+} 
