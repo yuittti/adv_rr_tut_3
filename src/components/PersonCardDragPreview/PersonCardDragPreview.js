@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import { personSelector } from '../../ducks/people';
 
 class PersonCardDragPreview extends Component {
-    state = {  }
+    
     render() { 
         return ( 
             <div>

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { DragLayer } from 'react-dnd';
 import PersonCardDragPreview from '../PersonCardDragPreview/PersonCardDragPreview';
+import EventDragPreview from '../EventDragPreview/EventDragPreview';
 
 const layerStyle = {
     position: 'fixed',
@@ -13,7 +14,8 @@ const layerStyle = {
 };
 
 const previewMap = {
-    person: PersonCardDragPreview
+    person: PersonCardDragPreview,
+    event: EventDragPreview
 }
 
 class CustomDragLayer extends Component {

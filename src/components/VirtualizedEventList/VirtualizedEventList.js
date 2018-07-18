@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { moduleName, fetchLazy, selectEvent, eventListSelector } from '../../ducks/events';
 import Loader from '../Loader/Loader';
+import TableRow from '../TableRow/TableRow';
 import { Table, Column, InfiniteLoader } from 'react-virtualized';
 import 'react-virtualized/styles.css';
 
@@ -32,6 +33,7 @@ export class VirtualizedEventList extends Component {
                         height={300}
                         onRowClick={this.handleRowClick}
                         onRowsRendered={onRowsRendered}
+                        rowRenderer={this.getRowRenderer}
                     >
                         <Column 
                             label="title"
@@ -54,7 +56,9 @@ export class VirtualizedEventList extends Component {
         );
     }
 
-    isRowLoaded = ({index}) => {index < this.props.events.length};
+    getRowRenderer = (rowCtx) => <TableRow {...rowCtx} />
+
+    isRowLoaded = ({index}) => index < this.props.events.length
 
     loadMoreRows = () => {
         console.log('====', 'load more');
