@@ -1,7 +1,7 @@
 import { appName } from '../config';
 import { Record, List } from 'immutable';
-import { all, put, call, takeEvery, select, fork, spawn, cancel, cancelled } from 'redux-saga/effects';
-import { delay } from 'redux-saga';
+import { all, put, call, take, takeEvery, select, fork, spawn, cancel, cancelled } from 'redux-saga/effects';
+import { delay, eventChannel } from 'redux-saga';
 import { reset } from 'redux-form';
 import { generateId , fbDataToEntities} from './utils';
 import firebase from 'firebase';
@@ -159,9 +159,37 @@ export const backgroundSyncSaga = function * () {
 }
 
 export const cancellableSync = function * () {
-    const task = yield fork(backgroundSyncSaga);
+    const task = yield fork(realTimeSync);
     yield delay(6000);
     yield cancel(task);
+}
+
+const createPeopleSocket = () => eventChannel(emmit => {
+    const ref = firebase.database().ref('people');
+    const callback = (data) => emmit({data});
+    ref.on('value', callback);
+    return () => {
+        console.log('------', 'unsubscribed');
+        ref.off('value', callback);
+    }
+});
+
+export const realTimeSync = function * () {
+    const chan = yield call(createPeopleSocket);
+    
+    try {
+        while(true) {
+            const {data} = yield take(chan);
+            yield put({
+                type: FETCH_ALL_SUCCESS,
+                payload: data.val()
+            });
+            console.log('************', data.val());
+        }
+    } finally {
+        yield call([chan, chan.close]);
+        console.log('------', 'cancelled real time saga');
+    }
 }
 
 // export function addNewPerson(person) {
